@@ -3,8 +3,22 @@ import Image from "next/image";
 import { MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 import Avatar from "react-avatar";
 import { useBoardStore } from "@/store/Board";
+import { account } from "@/appwrite";
 export default function Header() {
   const [searchString, setSearchString] = useBoardStore(state => [state.searchString, state.setSearchString])
+   const login = () => {
+    const response = account.createOAuth2Session({
+      provider: 'google',
+    });
+  
+    if (response.error) {
+      console.log(response.error);
+      return;
+    }
+  
+    const user = response.data;
+    console.log(user);
+  }
   return (
     <header className="w-full">
       <div className="flex flex-col md:flex-row  items-center justify-between space-x-5  p-5 bg-gray-500/10 rounded-b-2xl">
@@ -30,6 +44,7 @@ export default function Header() {
           </form>
           <Avatar name='Nhân' round color="#0055D1" size="50"/> 
         </div>
+        <button onClick={() => login()}>Login</button>
       </div>
     </header>
   )
